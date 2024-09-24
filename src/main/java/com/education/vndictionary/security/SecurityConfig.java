@@ -1,6 +1,7 @@
 package com.education.vndictionary.security;
 
 import com.education.vndictionary.security.filters.AuthTokenFilter;
+import com.education.vndictionary.security.filters.ThreadContextFilter;
 import com.education.vndictionary.security.providers.BasicAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -37,13 +38,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                             auth.requestMatchers("/api/auth/**").permitAll();
                             auth.requestMatchers("/api/view/**").permitAll();
-                            auth.requestMatchers("/api/swagger-ui/**").permitAll();
+                            auth.requestMatchers("/swagger-ui/**").permitAll();
                             auth.anyRequest().authenticated();
                         }
 
                 )
                 .authenticationManager(new ProviderManager(List.of(basicAuthenticationProvider)))
                 .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(threadContextFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -61,5 +63,10 @@ public class SecurityConfig {
     @Bean
     public AuthTokenFilter authTokenFilter() {
         return new AuthTokenFilter();
+    }
+
+    @Bean
+    public ThreadContextFilter threadContextFilter() {
+        return new ThreadContextFilter();
     }
 }

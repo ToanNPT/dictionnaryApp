@@ -4,6 +4,7 @@ import com.education.vndictionary.common.CommonConstant;
 import com.education.vndictionary.common.Messages;
 import com.education.vndictionary.common.HttpResponseUtil;
 import com.education.vndictionary.common.MessageParams;
+import com.education.vndictionary.configs.CustomContextHolder;
 import com.education.vndictionary.dtos.PaginatedHttpResponse;
 import com.education.vndictionary.dtos.TopicDto;
 import com.education.vndictionary.dtos.converters.TopicConverter;
@@ -13,6 +14,7 @@ import com.education.vndictionary.exceptions.AppErrorException;
 import com.education.vndictionary.mybatisQuery.TopicCustomQueryMapper;
 import com.education.vndictionary.repositories.TopicRepository;
 import com.education.vndictionary.repositories.TopicTotalViewRepository;
+import com.education.vndictionary.security.filters.ThreadContextFilter;
 import com.education.vndictionary.services.TopicService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+
+import static com.education.vndictionary.configs.CustomContextHolder.getContext;
 
 @Service
 @RequiredArgsConstructor

@@ -5,6 +5,9 @@ import lombok.Data;
 
 @Data
 public class CustomContext {
-    private UserDetailsImpl userDetails;
+    private UserDetailsImpl logonAccount;
 
+    private String cookie;
+
+    private boolean isAuthenticated;
 }

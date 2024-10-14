@@ -1,8 +1,10 @@
 package com.education.vndictionary.security.providers;
 
+import com.education.vndictionary.exceptions.AppErrorException;
 import com.education.vndictionary.security.authentications.BasicAuthentication;
 import com.education.vndictionary.services.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContextException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +27,7 @@ public class BasicAuthenticationProvider implements AuthenticationProvider {
 
             return new UsernamePasswordAuthenticationToken(userDetail, userDetail.getPassword(), userDetail.getAuthorities());
         } else {
-            throw new BadCredentialsException("please dont try to hack");
+            throw new AppErrorException( 401, "Username or password is incorrect");
         }
 
     }

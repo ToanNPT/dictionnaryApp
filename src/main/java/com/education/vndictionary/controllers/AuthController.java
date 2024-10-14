@@ -10,10 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/")
@@ -36,5 +33,15 @@ public class AuthController {
             return HttpResponseUtil.createSuccessResponse(userInfo);
         }
 
+    }
+
+    @GetMapping("/test")
+    public BaseHttpResponse test() {
+        return HttpResponseUtil.createSuccessResponse("Test");
+    }
+
+    @GetMapping("/my-info")
+    public BaseHttpResponse validateLogonUser(@CookieValue("dictionaryCKN") String token) {
+        return HttpResponseUtil.createSuccessResponse(this.authService.verifyByToken(token));
     }
 }

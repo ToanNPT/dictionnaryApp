@@ -1,13 +1,14 @@
 package com.education.vndictionary.services.impl;
 
-import com.education.vndictionary.common.HttpResponseUtil;
 import com.education.vndictionary.common.Jwt;
 import com.education.vndictionary.dtos.requests.LoginRequest;
+import com.education.vndictionary.entities.Role;
+import com.education.vndictionary.entities.User;
+import com.education.vndictionary.exceptions.AppErrorException;
+import com.education.vndictionary.repositories.RoleRepository;
+import com.education.vndictionary.repositories.UserRepository;
 import com.education.vndictionary.services.AuthService;
-import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,10 @@ import java.util.List;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
+
+    private final UserRepository userRepository;
+
+    private final RoleRepository roleRepository;
 
     private final Jwt jwtUtils;
 
@@ -40,4 +45,16 @@ public class AuthServiceImpl implements AuthService {
         return userDetails;
     }
 
+    @Override
+    public UserDetailsImpl verifyByToken(String token) {
+        jwtUtils.validateJwtToken(token);
+        var username = jwtUtils.getUserNameFromJwtToken(token);
+
+        User user = this.userRepository.findByUsername(username);
+        if (user == null) {
+            throw new AppErrorException(401, "User not found");
+        }
+        Role role = this.roleRepository.findById(user.getRoleId()).orElse(null);
+        return UserDetailsImpl.build(user, role);
+    }
 }

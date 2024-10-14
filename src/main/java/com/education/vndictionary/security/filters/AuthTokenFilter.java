@@ -53,6 +53,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         boolean isIgnore =  request.getRequestURI().startsWith("/api/auth")
                 || request.getRequestURI().startsWith("/api/view")
+                || request.getRequestURI().startsWith("/api/upload/file")
+                || request.getRequestURI().startsWith("/uploads")
                 || request.getRequestURI().startsWith("/swagger-ui");
         return isIgnore;
     }

@@ -7,4 +7,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface AuthService {
     UserDetailsImpl verifyByUsernamePassword(LoginRequest payload);
+
+    UserDetailsImpl verifyByToken(String token);
 }

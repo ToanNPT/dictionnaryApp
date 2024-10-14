@@ -63,7 +63,10 @@ public class WordServiceImpl implements WordService {
 
         WordDto dto =  WordConverter.toWordDto(word, topicName);
         List<WordDescription> descriptions  = this.wordDescriptionRepository.findByWordIdAndIsHiddenOrderBySec(wordId, false);
+        String wordTypes = descriptions.stream().map(WordDescription::getWordType).collect(Collectors.joining(", "));
+
         dto.setDescriptions(WordConverter.toWordDescriptionDtos(descriptions));
+        dto.setWordType(wordTypes);
         return dto;
     }
 
@@ -122,17 +125,17 @@ public class WordServiceImpl implements WordService {
                 params.getTopicId(),
                 params.getDateOrder(),
                 params.getSize(),
-                params.getPage()
+                (params.getPage() - 1) * params.getSize()
         );
 
         Integer countElements = this.wordCustomQueryMapper.countSearchWords(params.getSearchText(), params.getTopicId());
-        var totalPages = countElements / params.getSize() == 0 ? countElements / params.getSize() : countElements / params.getSize() + 1;
+        var totalPages = countElements % params.getSize() == 0 ? countElements / params.getSize() : countElements / params.getSize() + 1;
         return HttpResponseUtil.paginatedHttpResponse(dtos, params.getPage(), totalPages, countElements);
     }
 
     @Transactional(rollbackOn = Exception.class)
     @Override
-    public void createWord(WordDto wordDto) {
+    public WordDto createWord(WordDto wordDto) {
         Topic dbTopic = this.topicRepository.findByIdAndIsHidden(wordDto.getTopicId(), false);
         if (dbTopic == null) {
             throw AppErrorException.notFoundException(Messages.formatErrorMsg(Messages.NOT_FOUND_TEMPLATE, MessageParams.TOPIC));
@@ -166,6 +169,10 @@ public class WordServiceImpl implements WordService {
 
             this.wordDescriptionRepository.saveAll(descriptions);
         }
+
+        WordDto dto =  WordConverter.toWordDto(word);
+
+        return dto;
 
     }
 
@@ -225,6 +232,7 @@ public class WordServiceImpl implements WordService {
     }
 
     @Override
+    @Transactional
     public void deleteWord(Integer wordId) {
         Word dbWord = this.wordRepository.findByIdAndIsHidden(wordId, false);
         if (dbWord == null) {

@@ -30,5 +30,7 @@ public class WordDto {
 
     private LocalDateTime updateTime;
 
+    private String wordType;
+
     private List<WordDescriptionDto> descriptions = new ArrayList<>();
 }

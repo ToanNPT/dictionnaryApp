@@ -25,7 +25,7 @@ public class UploadFileController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping(value = "upload/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
-    public FileDto doUploadFile(@RequestPart(value = "file1", required = true) MultipartFile file) {
+    public FileDto doUploadFile(@RequestPart(value = "file", required = true) MultipartFile file) {
         try {
             UploadFileRequest req = new UploadFileRequest();
             req.setFile(file);

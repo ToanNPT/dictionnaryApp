@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/")
 public class WordManageController {
 
     private final WordService wordService;
@@ -54,14 +55,12 @@ public class WordManageController {
 
     @GetMapping("view/words/search")
     public BaseHttpResponse searchWords(
-            @RequestParam(value = "q") WordSearchParams q
+            @ModelAttribute WordSearchParams q
     ) {
         try {
             logger.info(String.format("Search words by keyword: %s", q));
             return this.wordService.searchWords(q);
 
-        } catch (Exception e) {
-            throw new AppErrorException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.INTERNAL_SERVER_ERROR);
         } finally {
             logger.info(String.format("Finished search words by keyword: %s", q));
         }
@@ -72,8 +71,8 @@ public class WordManageController {
 
         try {
             logger.info("Create word");
-            this.wordService.createWord(wordDto);
-            return HttpResponseUtil.createSuccessResponse();
+            var dto = this.wordService.createWord(wordDto);
+            return HttpResponseUtil.createSuccessResponse(dto);
         } catch (Exception e) {
             throw new AppErrorException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.INTERNAL_SERVER_ERROR);
         } finally {

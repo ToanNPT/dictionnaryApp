@@ -19,7 +19,7 @@ public class TopicConverter {
         dto.setThumbnail(topic.getThumbnail());
         dto.setSec(topic.getSec());
         dto.setIsHidden(topic.getIsHidden());
-//        dto.setUpdateTime(topic.getUpdateTime());
+//        dto.setUpdateTime(topics.getUpdateTime());
         return dto;
 
     }

@@ -21,6 +21,14 @@
 
     </select>
 
+    <select id="getAllTopicIdAndName" resultMap="TopicWithViewCountResult">
+        SELECT t.id, t.topic_name, t.thumbnail, t.sec, t.is_hidden, c.view_count, t.update_time
+        FROM topics t
+                 INNER JOIN count_view_topic c ON c.topic_id = t.id
+        WHERE t.is_hidden = false
+        ORDER BY t.update_time DESC
+    </select>
+
     <select id="getTopicsWithPaging" resultMap="TopicWithViewCountResult">
         SELECT t.id, t.topic_name, t.thumbnail, t.sec, t.is_hidden, c.view_count, t.update_time
         FROM topics t

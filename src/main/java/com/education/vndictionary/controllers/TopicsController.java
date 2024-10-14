@@ -59,7 +59,7 @@ public class TopicsController {
     @GetMapping("view/topics/{id}")
     public BaseHttpResponse getTopicById(@PathVariable("id") Integer id) {
         try {
-            logger.info(String.format("Get topic by id: %d", id));
+            logger.info(String.format("Get topics by id: %d", id));
             TopicDto dto = this.topicService.getTopicById(id);
             return HttpResponseUtil.createSuccessResponse(dto);
 
@@ -67,7 +67,7 @@ public class TopicsController {
             logger.error("Error: ", e);
             throw new AppErrorException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.INTERNAL_SERVER_ERROR);
         } finally {
-            logger.info(String.format("Finished get topic by id: %d", id));
+            logger.info(String.format("Finished get topics by id: %d", id));
         }
     }
 
@@ -78,7 +78,7 @@ public class TopicsController {
             @RequestParam(value = "page", required = false) Integer page
     ) {
         try {
-            logger.info(String.format("Search topic by keyword: %s", q));
+            logger.info(String.format("Search topics by keyword: %s", q));
             List<TopicDto> topics = this.topicService.searchTopics(q, size, page);
             return HttpResponseUtil.createSuccessResponse(topics);
 
@@ -86,49 +86,64 @@ public class TopicsController {
             logger.error("Error: ", e);
             throw new AppErrorException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.INTERNAL_SERVER_ERROR);
         } finally {
-            logger.info(String.format("Finished search topic by keyword: %s", q));
+            logger.info(String.format("Finished search topics by keyword: %s", q));
+        }
+    }
+
+    @GetMapping("view/topics/all")
+    public BaseHttpResponse getAllTopicIdAndName() {
+        try {
+            logger.info("Get All Topic IDs and Name");
+            List<TopicDto> topics = this.topicService.getAllTopicIdAndName();
+            return HttpResponseUtil.createSuccessResponse(topics);
+
+        } catch (Exception e) {
+            logger.error("Error: ", e);
+            throw new AppErrorException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.INTERNAL_SERVER_ERROR);
+        } finally {
+            logger.info("Finish Get All Topic IDs and Name");
         }
     }
 
     @PostMapping(value = "topics")
     public BaseHttpResponse createTopic(@RequestBody TopicDto topicDto) {
         try {
-            logger.info("Create topic");
+            logger.info("Create topics");
             this.topicService.createTopic(topicDto);
             return HttpResponseUtil.createSuccessResponse(Messages.SUCCESS_UPSERT_OPERATION);
         } catch (Exception e) {
             logger.error("Error: ", e);
             throw new AppErrorException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.INTERNAL_SERVER_ERROR);
         } finally {
-            logger.info("Finished create topic");
+            logger.info("Finished create topics");
         }
     }
 
     @PutMapping("topics/{id}")
     public BaseHttpResponse updateTopic(@PathVariable("id") Integer id, @RequestBody TopicDto topicDto) {
         try {
-            logger.info("Update topic");
+            logger.info("Update topics");
             this.topicService.updateTopic(id, topicDto);
             return HttpResponseUtil.createSuccessResponse(Messages.SUCCESS_UPSERT_OPERATION);
         } catch (Exception e) {
             logger.error("Error: ", e);
             throw new AppErrorException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.INTERNAL_SERVER_ERROR);
         } finally {
-            logger.info("Finished update topic");
+            logger.info("Finished update topics");
         }
     }
 
     @DeleteMapping("topics/{id}")
     public BaseHttpResponse deleteTopic(@PathVariable("id") Integer id) {
         try {
-            logger.info(String.format("Delete topic by id: %d", id));
+            logger.info(String.format("Delete topics by id: %d", id));
             this.topicService.deleteTopic(id);
             return HttpResponseUtil.createSuccessResponse();
         } catch (Exception e) {
             logger.error("Error: ", e);
             throw new AppErrorException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.INTERNAL_SERVER_ERROR);
         } finally {
-            logger.info(String.format("Finished delete topic by id: %d", id));
+            logger.info(String.format("Finished delete topics by id: %d", id));
         }
     }
 

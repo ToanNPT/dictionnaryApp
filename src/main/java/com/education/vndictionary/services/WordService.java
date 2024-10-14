@@ -13,7 +13,7 @@ public interface WordService {
 
     PaginatedHttpResponse searchWords(WordSearchParams params);
 
-    void createWord(WordDto wordDto);
+    WordDto createWord(WordDto wordDto);
 
     void updateWord(Integer id, WordDto wordDto);
 

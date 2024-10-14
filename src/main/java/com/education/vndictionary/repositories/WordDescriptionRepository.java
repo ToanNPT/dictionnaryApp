@@ -1,6 +1,7 @@
 package com.education.vndictionary.repositories;
 
 import com.education.vndictionary.entities.WordDescription;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,6 @@ public interface WordDescriptionRepository extends JpaRepository<WordDescription
     Integer getMaxSecByWordId(Integer wordId);
 
     @Modifying
-    @Query("UPDATE WordDescription wd SET wd.isHidden = true WHERE wd.wordId = ?1")
-    void unActiveWordDescriptionByWordId(Integer wordId);
+    @Query("UPDATE WordDescription wd SET wd.isHidden = true WHERE wd.wordId = :wordId")
+    void unActiveWordDescriptionByWordId(@Param("wordId") Integer wordId);
 }

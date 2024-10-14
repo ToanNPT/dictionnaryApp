@@ -14,6 +14,7 @@ public interface TopicCustomQueryMapper {
     List<TopicDto> getPopularTopics(@Param("limit") Integer limit);
 
     List<TopicDto> getTopicsWithPaging(@Param("limit") Integer limit, @Param("offset") Integer offset);
+    List<TopicDto> getAllTopicIdAndName();
 
     Integer countTotalTopic();
 

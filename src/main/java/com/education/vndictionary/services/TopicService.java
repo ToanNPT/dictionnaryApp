@@ -12,6 +12,8 @@ public interface TopicService {
 
     List<TopicDto> searchTopics(String keyword, Integer limit, Integer offset);
 
+    List<TopicDto> getAllTopicIdAndName();
+
     void createTopic(TopicDto topicDto);
 
     void updateTopic(Integer topicId, TopicDto topicDto);

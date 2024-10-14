@@ -4,7 +4,6 @@ import com.education.vndictionary.common.CommonConstant;
 import com.education.vndictionary.common.Messages;
 import com.education.vndictionary.common.HttpResponseUtil;
 import com.education.vndictionary.common.MessageParams;
-import com.education.vndictionary.configs.CustomContextHolder;
 import com.education.vndictionary.dtos.PaginatedHttpResponse;
 import com.education.vndictionary.dtos.TopicDto;
 import com.education.vndictionary.dtos.converters.TopicConverter;
@@ -14,7 +13,6 @@ import com.education.vndictionary.exceptions.AppErrorException;
 import com.education.vndictionary.mybatisQuery.TopicCustomQueryMapper;
 import com.education.vndictionary.repositories.TopicRepository;
 import com.education.vndictionary.repositories.TopicTotalViewRepository;
-import com.education.vndictionary.security.filters.ThreadContextFilter;
 import com.education.vndictionary.services.TopicService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +23,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-
-import static com.education.vndictionary.configs.CustomContextHolder.getContext;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +63,11 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    public List<TopicDto> getAllTopicIdAndName() {
+        return this.topicCustomQueryMapper.getAllTopicIdAndName();
+    }
+
+    @Override
     @Transactional(rollbackOn = Exception.class, value = Transactional.TxType.REQUIRES_NEW)
     public void createTopic(TopicDto topicDto) {
 
@@ -102,7 +103,7 @@ public class TopicServiceImpl implements TopicService {
         }
 
         topic.setTopicName(topicDto.getTopicName());
-        if (topic.getThumbnail() != null && !topic.getThumbnail().equals(topicDto.getThumbnail())) {
+        if (topic.getThumbnail() != null && !topic.getThumbnail().isEmpty() && !topic.getThumbnail().equals(topicDto.getThumbnail())) {
             try {
                 this.fileCommonService.deleteFile(topic.getThumbnail());
             } catch (IOException e) {
@@ -128,7 +129,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public List<TopicDto> viewPopularTopics(Integer limit) {
-        limit = limit == null || limit < 0 ? CommonConstant.DEFAULT_LIMIT : limit;
+        limit = limit == null || limit < 0 ? 6 : limit;
         List<TopicDto> topics = this.topicCustomQueryMapper.getPopularTopics(limit);
         if (topics == null) {
             return Collections.emptyList();
